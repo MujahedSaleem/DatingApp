@@ -1,3 +1,4 @@
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,7 +61,11 @@ namespace DatingApp.API.Data
             {
                 return user;
             }
-            return null;
+            StringBuilder error = new StringBuilder();
+            foreach( var item in result.Errors){
+                error.Append(item.Description);
+            }
+            throw new System.Exception(error.ToString());
 
 
 

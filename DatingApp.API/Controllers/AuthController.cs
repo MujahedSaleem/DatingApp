@@ -40,14 +40,17 @@ namespace DatingApp.API.Controllers
 
             };
             var createdUser = await _repo.Register(user: User, Password: userForRegisterDto.Password);
-
+            if (createdUser.GetType() == typeof(User))
+            {
             return StatusCode(201);
+            }
+            return StatusCode(204);
 
         }
         [HttpPost("login")]
         public async Task<IActionResult> LogIn(UserForLogInDto userForLogInDto)
         {
-
+            
 
             userForLogInDto.UserName = userForLogInDto.UserName.ToLower();
             if (!_repo.userExistsAsync(userForLogInDto.UserName))
@@ -80,7 +83,7 @@ namespace DatingApp.API.Controllers
                      );
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
 
-            return Ok(new {Token=tokenString});
+            return Ok(new { Token = tokenString });
 
         }
     }
