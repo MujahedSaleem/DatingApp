@@ -13,7 +13,7 @@ namespace DatingApp.ApI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+ //   [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ValuesController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
