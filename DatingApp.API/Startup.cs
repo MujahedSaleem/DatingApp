@@ -23,6 +23,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using DatingApp.API.ExtentionsMethods;
+using Newtonsoft.Json;
+using AutoMapper;
 
 namespace DatingApp.API
 {
@@ -38,13 +40,18 @@ namespace DatingApp.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper();
             services.AddDbContext<ApplicationDbContext>(a => a.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddScoped<IDatingRepository, DatingRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddIdentity<User, IdentityRole>()
                  .AddEntityFrameworkStores<ApplicationDbContext>()
                  .AddDefaultTokenProviders();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                             .AddJsonOptions(Options=> {
+                                 Options.SerializerSettings.ReferenceLoopHandling=
+                                 ReferenceLoopHandling.Ignore;
+                             });
             services.AddCors(Options =>
             {
                 Options.AddPolicy("EnableCROS", builder =>
@@ -53,6 +60,7 @@ namespace DatingApp.API
                 });
 
             });
+            services.AddTransient<Seed>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(Options =>
                 {
@@ -75,7 +83,7 @@ namespace DatingApp.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seed sd)
         {
             if (env.IsDevelopment())
             {
@@ -99,6 +107,7 @@ namespace DatingApp.API
             }
 
             //   app.UseHttpsRedirection();
+            //   sd.SeedUsers();
             app.UseAuthentication();
             app.UseCors("EnableCROS");
             app.UseMvc();

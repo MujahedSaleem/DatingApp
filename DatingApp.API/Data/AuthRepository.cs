@@ -55,8 +55,7 @@ namespace DatingApp.API.Data
 
         public async Task<User> Register(User user, string Password)
         {
-            var users = new User { UserName=user.Name, Name = user.Name, Email = user.Name };
-            var result = await _userManager.CreateAsync(users, Password);
+            var result = await _userManager.CreateAsync(user, Password);
             if (result.Succeeded)
             {
                 return user;
