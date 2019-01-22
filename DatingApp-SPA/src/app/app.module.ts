@@ -10,6 +10,9 @@ import { AuthService } from './_services/auth.service';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { httpInterceptorProviders } from './Intercep/error.interceptor';
+import { AlertifyService } from './_services/alertify.service';
+import { BsDropdownModule } from 'ngx-bootstrap';
+
 @NgModule({
    declarations: [
       AppComponent,
@@ -21,11 +24,13 @@ import { httpInterceptorProviders } from './Intercep/error.interceptor';
       BrowserModule,
       AppRoutingModule,
       HttpClientModule,
-      FormsModule
+      FormsModule,
+      BsDropdownModule.forRoot()
    ],
    providers: [
       AuthService,
-      httpInterceptorProviders
+      httpInterceptorProviders,
+      AlertifyService
    ],
    bootstrap: [
       AppComponent
