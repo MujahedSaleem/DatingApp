@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DatingApp.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController, Authorize]
+    [ApiController, Authorize(AuthenticationSchemes = "Bearer")]
 
     public class UsersController : ControllerBase
     {

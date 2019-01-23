@@ -11,12 +11,24 @@ import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { httpInterceptorProviders } from './Intercep/error.interceptor';
 import { AlertifyService } from './_services/alertify.service';
-import { BsDropdownModule } from 'ngx-bootstrap';
-import { MemberListComponent } from './member-list/member-list.component';
+import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
+import { MemberListComponent } from './members/member-list/member-list.component';
 import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './Messages/Messages.component';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from './_gurds/auth.guard';
+import { UserService } from './_services/user.service';
+import { MemberCardComponent } from './members/member-Card/member-Card.component';
+import { JwtModule } from '@auth0/angular-jwt';
+import { MemberDetailsComponent } from './members/member-details/member-details.component';
+import { MemberDetailResolver } from './_resolver/member-detail.resolver';
+import { MemberListResolver } from './_resolver/member-list.resolver';
+import { NgxGalleryModule } from 'ngx-gallery';
+
+
+export function tokenGetter() {
+   return localStorage.getItem('token');
+ }
 @NgModule({
    declarations: [
       AppComponent,
@@ -25,20 +37,38 @@ import { AuthGuard } from './_gurds/auth.guard';
       RegisterComponent,
       MemberListComponent,
       ListsComponent,
-      MessagesComponent
+      MessagesComponent,
+      MemberCardComponent,
+      MemberDetailsComponent
+
    ],
    imports: [
       BrowserModule,
       AppRoutingModule,
       HttpClientModule,
       FormsModule,
+      TabsModule.forRoot(),
       BsDropdownModule.forRoot(),
+      JwtModule.forRoot({
+        config: {
+          tokenGetter: tokenGetter,
+          /*send Token*/
+          whitelistedDomains: ['localhost:5000'],
+          /*don't send Token*/
+          blacklistedRoutes: ['localhost:5000/api/auth']
+        }
+      }),
+      NgxGalleryModule
+
       ],
    providers: [
       AuthService,
       httpInterceptorProviders,
       AlertifyService,
-      AuthGuard
+      AuthGuard,
+      UserService,
+      MemberDetailResolver,
+      MemberListResolver
    ],
    bootstrap: [
       AppComponent
