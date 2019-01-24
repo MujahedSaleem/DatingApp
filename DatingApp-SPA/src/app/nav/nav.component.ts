@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: '/app-nav',
@@ -16,7 +17,7 @@ export class NavComponent implements OnInit {
      private alertyfiy: AlertifyService,
      private router: Router) {}
   ngOnInit() {
-     this.name = this.authService.decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
+     this.name = this.authService.decodedToken[environment.Name];
   }
 
   login() {
@@ -30,7 +31,7 @@ export class NavComponent implements OnInit {
 
         });
   }
- 
+
   loggedIn() {
   return this.authService.loggedIn();
   }

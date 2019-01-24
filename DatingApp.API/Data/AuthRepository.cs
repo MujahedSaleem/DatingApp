@@ -19,21 +19,26 @@ namespace DatingApp.API.Data
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         public Dictionary<string, string> Names { get; set; }
+        private readonly IDatingRepository Repo ;
+
         private readonly RoleManager<IdentityRole> _roleManager;
         public AuthRepository(ApplicationDbContext db, UserManager<User> userManager,
             SignInManager<User> signInManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IDatingRepository repo
+            )
         {
             _db = db;
             _roleManager = roleManager;
+            Repo = repo;
             _userManager = userManager;
             _signInManager = signInManager;
             var Users = _db.User.ToList();
             Names = new Dictionary<string, string>();
-            
+
             foreach (var item in Users)
             {
-                Names.Add(item.Id, item.Name);
+                Names.Add(item.Id, item.UserName);
             }
         }
         public async Task<User> Login(string userName, string Password)
@@ -41,12 +46,11 @@ namespace DatingApp.API.Data
             if (userExistsAsync(userName))
             {
                 var result = await _signInManager.PasswordSignInAsync(userName, Password, false, false);
-                var users = new User {UserName=userName, Name = userName, Email = userName };
-                var results = await _userManager.CreateAsync(users, Password);
+                var users = await Repo.GetUser(this.Names.FirstOrDefault(a=>a.Value==userName).Key);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(users,false);
-                    
+                    await _signInManager.SignInAsync(users, false);
+
                 }
                 return users;
             }
@@ -61,11 +65,11 @@ namespace DatingApp.API.Data
                 return user;
             }
             StringBuilder error = new StringBuilder();
-            foreach( var item in result.Errors){
+            foreach (var item in result.Errors)
+            {
                 error.Append(item.Description);
             }
-            throw new System.Exception(error.ToString());
-
+            return null;
 
 
         }
@@ -73,8 +77,8 @@ namespace DatingApp.API.Data
 
         public bool userExistsAsync(string userName)
         {
-            if(Names is null)
-            return false;
+            if (Names is null)
+                return false;
             var name = (Names.FirstOrDefault(a => a.Value == userName)).Value;
             if (name is null)
             {

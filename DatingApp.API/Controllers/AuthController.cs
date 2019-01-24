@@ -23,6 +23,7 @@ namespace DatingApp.API.Controllers
             _repo = repo;
             Configuration = config;
         }
+        
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
@@ -52,7 +53,7 @@ namespace DatingApp.API.Controllers
         {
             
 
-            userForLogInDto.UserName = userForLogInDto.UserName.ToLower();
+            userForLogInDto.UserName = userForLogInDto.UserName;
             if (!_repo.userExistsAsync(userForLogInDto.UserName))
             {
                 return Unauthorized();
@@ -64,9 +65,9 @@ namespace DatingApp.API.Controllers
                 return Unauthorized();
             }
             var claims = new[]{
-                new Claim(ClaimTypes.NameIdentifier,createdUser.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier,createdUser.Id),
 
-                new Claim(ClaimTypes.Name,createdUser.Name.ToString())
+                new Claim(ClaimTypes.Name,createdUser.UserName)
 
             };
             var Securitykey = new SymmetricSecurityKey(Encoding.UTF8
@@ -78,7 +79,7 @@ namespace DatingApp.API.Controllers
                          issuer: "http://localhost:5000",
                          audience: "http://localhost:5000",
                          claims: claims,
-                         expires: DateTime.Now.AddMinutes(5),
+                         expires: DateTime.Now.AddDays(1),
                          signingCredentials: signinCredentials
                      );
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);

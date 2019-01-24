@@ -107,7 +107,7 @@ namespace DatingApp.API
             }
 
             //   app.UseHttpsRedirection();
-            //   sd.SeedUsers();
+            // sd.SeedUsers();
             app.UseAuthentication();
             app.UseCors("EnableCROS");
             app.UseMvc();

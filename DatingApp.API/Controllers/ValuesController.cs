@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DatingApp.ApI.Data;
+using DatingApp.API.Data;
 using DatingApp.API.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -17,10 +18,14 @@ namespace DatingApp.ApI.Controllers
     public class ValuesController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
-        public ValuesController(ApplicationDbContext db)
+
+        public readonly IAuthRepository Repo ;
+
+        public ValuesController(ApplicationDbContext db, IAuthRepository repo)
         {
             _db = db;
-      
+            Repo = repo;
+            new Seed(db,repo).SeedUsers();
         }
         // GET api/values
         [HttpGet]

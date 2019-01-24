@@ -4,7 +4,10 @@
 
 export const environment = {
   production: false,
-  apiurl: 'http://localhost:5000/api/'
+  apiurl: 'http://localhost:5000/api/',
+  NameIdentifier: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier',
+  Name: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'
+
 };
 
 /*
