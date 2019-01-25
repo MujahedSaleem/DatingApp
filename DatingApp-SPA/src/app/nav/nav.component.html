@@ -10,10 +10,12 @@
       </ul>
     
       <div class="dropdown" *ngIf="loggedIn()" dropdown>
+        <div class="inline">
+          <img src="{{Url}}" alt="" class="rounded-circle mr-1">
           <a class=" dropdown-toggle text-light" dropdownToggle (click)="false" aria-controls="basic-link-dropdown" >
             Welcome {{name | titlecase}}
           </a>
-        
+        </div>
           <div class="dropdown-menu mt-3" *dropdownMenu>
             <a class="dropdown-item" [routerLink]="['/members/edit']"  >
               <i class="fa fa-user"></i> Edit Profile</a>

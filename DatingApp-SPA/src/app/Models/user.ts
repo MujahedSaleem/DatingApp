@@ -8,7 +8,7 @@ export interface User {
   gander: string;
   created: Date;
   lastActive: Date;
-  photoUrl: string;
+  photosUrl: string;
   city: string;
   country: string;
   intrests?: string;

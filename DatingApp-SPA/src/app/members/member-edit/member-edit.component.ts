@@ -32,6 +32,9 @@ export class MemberEditComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.user = data['user'];
     });
+    this.authService.currentUserUrl.subscribe( a => {
+      this.user.photosUrl = a;
+     });
   }
   updateUsers() {
     this.userService.updateUser(this.authService.decodedToken[environment.NameIdentifier], this.user)
@@ -44,5 +47,9 @@ export class MemberEditComponent implements OnInit {
     });
     this.editForm.reset(this.user);
    }
-   
+   setMainPhoto(url: string) {
+     this.authService.currentUserUrl.subscribe( a => {
+      this.user.photosUrl = a;
+     });
+   }
 }

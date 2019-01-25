@@ -10,7 +10,8 @@ namespace DatingApp.API.Models
         public string description { get; set; }
         public DateTime DateAdded { get; set; }
         public bool IsMain { get; set; }
-
+        public string PublicID { get; set; }
+        
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         public virtual User user { get; set; }

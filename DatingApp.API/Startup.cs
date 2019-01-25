@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Http;
 using DatingApp.API.ExtentionsMethods;
 using Newtonsoft.Json;
 using AutoMapper;
+using DatingApp.API.HelpersAndExtentions;
 
 namespace DatingApp.API
 {
@@ -48,10 +49,12 @@ namespace DatingApp.API
                  .AddEntityFrameworkStores<ApplicationDbContext>()
                  .AddDefaultTokenProviders();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                             .AddJsonOptions(Options=> {
-                                 Options.SerializerSettings.ReferenceLoopHandling=
+                             .AddJsonOptions(Options =>
+                             {
+                                 Options.SerializerSettings.ReferenceLoopHandling =
                                  ReferenceLoopHandling.Ignore;
                              });
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddCors(Options =>
             {
                 Options.AddPolicy("EnableCROS", builder =>
