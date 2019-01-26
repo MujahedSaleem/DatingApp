@@ -20,10 +20,12 @@ export class NavComponent implements OnInit {
      private alertyfiy: AlertifyService,
      private router: Router) {}
   ngOnInit() {
-     this.name = this.authService.decodedToken[environment.Name];
+    if (this.loggedIn()) {
+      this.name = this.authService.decodedToken[environment.Name];
       this.authService.photoUrl.subscribe(next => {
        this.Url = next;
      });
+    }
   }
 
   login() {
@@ -42,12 +44,16 @@ export class NavComponent implements OnInit {
   return this.authService.loggedIn();
   }
   logout() {
+    this.authService.logout().subscribe(a => {
+      this.alertyfiy.success(a.toString());
+    });
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     this.authService.decodedToken = null;
     this.authService.currentuser = null;
     this.alertyfiy.message('logged out');
     this.router.navigate(['/home']);
+
 
   }
 }

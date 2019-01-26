@@ -37,10 +37,17 @@ export class AuthService {
       })
     );
   }
+  logout() {
+    return this.http.post(this.baseUrl + 'logout/', null);
+  }
 
   register(model: any) {
+    const user: User = model ;
+    if (user.photosUrl == null) {
+    user.photosUrl = this.photoUrl.value;
+    }
     return this.http.post(this.baseUrl + 'Register/', model );
-         }
+  }
 
   loggedIn() {
     const token = localStorage.getItem('token');

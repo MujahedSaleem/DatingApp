@@ -36,6 +36,16 @@ namespace DatingApp.API.MapperProfiles
             CreateMap<User, UserForUpdatesDto>().ReverseMap();
             CreateMap<Photo, PhotoForReturnDto>().ReverseMap();
             CreateMap<Photo, photoForCreationDto>().ReverseMap();
+            CreateMap<User, UserForRegisterDto>()
+            .ForMember(dest => dest.UserName, opt =>
+            {
+                opt.MapFrom(src => src.Name);
+            })
+            .ForMember(dest => dest.gender, opt =>
+            {
+                opt.MapFrom(src => src.gander);
+            }).ReverseMap();
+            
         }
 
     }

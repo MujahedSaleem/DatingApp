@@ -11,7 +11,7 @@
     
       <div class="dropdown" *ngIf="loggedIn()" dropdown>
         <div class="inline">
-          <img src="{{Url}}" alt="" class="rounded-circle mr-1">
+          <img src="{{Url || '../../../../assets/user.png'}} " alt="" class="rounded-circle mr-1">
           <a class=" dropdown-toggle text-light" dropdownToggle (click)="false" aria-controls="basic-link-dropdown" >
             Welcome {{name | titlecase}}
           </a>

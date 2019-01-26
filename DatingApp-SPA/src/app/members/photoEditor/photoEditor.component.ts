@@ -50,6 +50,15 @@ export class PhotoEditorComponent implements OnInit {
           isMain: res.isMain
         };
         this.photos.push(photo);
+        if (photo.isMain) {
+          this.alertify.success('Photo Chancged successFully');
+          this.authServic.changeMemberPhoto(photo.url);
+          this.authServic.currentuser.photosUrl = photo.url;
+          localStorage.setItem(
+            'user',
+            JSON.stringify(this.authServic.currentuser)
+          );       
+         }
       }
     };
   }

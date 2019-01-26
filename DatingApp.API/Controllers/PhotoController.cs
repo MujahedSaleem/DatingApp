@@ -91,8 +91,10 @@ namespace DatingApp.API.Controllers
             if (await _Repo.SaveAll())
             {
                 var phototoReturn = _Mapper.Map<PhotoForReturnDto>(photo);
-
-                return CreatedAtRoute("GetPhoto", new { id = photo.Id }, phototoReturn);
+                return CreatedAtRoute(
+                                   routeName: "GetPhoto",
+                                   routeValues: new { id = photo.Id },
+                                   value: photo);
             }
             return BadRequest("Could not Uplode Photo");
 
@@ -149,8 +151,10 @@ namespace DatingApp.API.Controllers
 
                 if (await _Repo.SaveAll())
                     return Ok(result.StatusCode);
-            }else{
-                    _Repo.Delete<Photo>(photoFromRepo);
+            }
+            else
+            {
+                _Repo.Delete<Photo>(photoFromRepo);
 
                 if (await _Repo.SaveAll())
                     return Ok();

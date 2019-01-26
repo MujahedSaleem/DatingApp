@@ -19,7 +19,7 @@ namespace DatingApp.API.Data
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         public Dictionary<string, string> Names { get; set; }
-        private readonly IDatingRepository Repo ;
+        private readonly IDatingRepository Repo;
 
         private readonly RoleManager<IdentityRole> _roleManager;
         public AuthRepository(ApplicationDbContext db, UserManager<User> userManager,
@@ -46,7 +46,7 @@ namespace DatingApp.API.Data
             if (userExistsAsync(userName))
             {
                 var result = await _signInManager.PasswordSignInAsync(userName, Password, false, false);
-                var users = await Repo.GetUser(this.Names.FirstOrDefault(a=>a.Value==userName).Key);
+                var users = await Repo.GetUser(this.Names.FirstOrDefault(a => a.Value == userName.ToLower()).Key);
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(users, false);
@@ -79,12 +79,17 @@ namespace DatingApp.API.Data
         {
             if (Names is null)
                 return false;
-            var name = (Names.FirstOrDefault(a => a.Value == userName)).Value;
+            var name = (Names.FirstOrDefault(a => a.Value == userName.ToLower())).Value;
             if (name is null)
             {
                 return false;
             }
             return true;
+        }
+
+        public async void LogOut()
+        {
+            await _signInManager.SignOutAsync();
         }
     }
 }

@@ -6,6 +6,7 @@ namespace DatingApp.API.Data
     {
         Task<User> Register(User user, string Password);
         Task<User> Login(string userName, string Password);
+        void LogOut();
         bool userExistsAsync(string userName);
 
 
