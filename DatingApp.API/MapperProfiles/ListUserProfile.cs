@@ -21,7 +21,7 @@ namespace DatingApp.API.MapperProfiles
             {
                 opt.MapFrom((src, dest) => src.Created.Date);
             }).ReverseMap();
-            CreateMap<User, UserForDetailsDto>().ForMember(dest => dest.PhotoUrl, opt =>
+            CreateMap<User, UserForDetailsDto>().ForMember(dest => dest.PhotosUrl, opt =>
             {
                 opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url);
             }).ForMember(dest => dest.Age, opt =>
@@ -29,7 +29,7 @@ namespace DatingApp.API.MapperProfiles
                 opt.MapFrom((src, dest) => src.DateOfBirth.Age());
             }).ForMember(dest => dest.Created, opt =>
             {
-                opt.MapFrom((src, dest) => src.Created.ToString("d/M/yyy"));
+                opt.MapFrom((src, dest) => src.Created);
             }).ReverseMap();
             CreateMap<Photo, UserPhotoDto>().ReverseMap();
 

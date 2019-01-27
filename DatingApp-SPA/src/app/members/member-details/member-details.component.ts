@@ -35,6 +35,7 @@ export class MemberDetailsComponent implements OnInit {
       }
     );
     this.loadImage();
+    console.log(this.user.photosUrl );
   }
   loadImage() {
     this.galleryOptions = [
