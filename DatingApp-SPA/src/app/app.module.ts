@@ -31,6 +31,10 @@ import { PhotoEditorComponent } from './members/photoEditor/photoEditor.componen
 import { FileUploadModule } from 'ng2-file-upload';
 import { BsDatepickerModule } from 'ngx-bootstrap';
 import {TimeAgoPipe} from 'time-ago-pipe';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { MemberFilterComponent } from './members/member-filter/member-filter.component';
+import { SidebarJSModule } from 'ng-sidebarjs';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
 
 export function tokenGetter() {
@@ -49,7 +53,8 @@ export function tokenGetter() {
       MemberDetailsComponent,
       MemberEditComponent,
       PhotoEditorComponent,
-      TimeAgoPipe
+      TimeAgoPipe,
+      MemberFilterComponent
 
    ],
    imports: [
@@ -59,8 +64,11 @@ export function tokenGetter() {
       FormsModule,
       ReactiveFormsModule,
       TabsModule.forRoot(),
+      SidebarJSModule.forRoot(),
+      PaginationModule.forRoot(),
       BsDatepickerModule.forRoot(),
       BsDropdownModule.forRoot(),
+      ButtonsModule.forRoot(),
       JwtModule.forRoot({
         config: {
           tokenGetter: tokenGetter,

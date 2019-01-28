@@ -46,7 +46,7 @@ namespace DatingApp.API.Data
             if (userExistsAsync(userName))
             {
                 var result = await _signInManager.PasswordSignInAsync(userName, Password, false, false);
-                var users = await Repo.GetUser(this.Names.FirstOrDefault(a => a.Value == userName.ToLower()).Key);
+                var users = await Repo.GetUser(this.Names.FirstOrDefault(a => a.Value.ToLower() == userName.ToLower()).Key);
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(users, false);
@@ -79,7 +79,7 @@ namespace DatingApp.API.Data
         {
             if (Names is null)
                 return false;
-            var name = (Names.FirstOrDefault(a => a.Value == userName.ToLower())).Value;
+            var name = (Names.FirstOrDefault(a => a.Value.ToLower() == userName.ToLower())).Value;
             if (name is null)
             {
                 return false;

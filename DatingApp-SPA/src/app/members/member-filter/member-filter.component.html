@@ -1,0 +1,104 @@
+<main class="cd-main-content">
+  <nav class="cd-side-nav">
+    <ul>
+     
+      <li class="has-children ">
+        
+        <input
+          class="form-control  "
+          type="text"
+          [(ngModel)]="userParams.name"
+          ng-model-options="{ debounce: 100 }"
+          id="search-box"
+          style="background-color: #c0dcf7;color: black;font-size: 18px;font-weight: bold"
+          placeholder="search"
+          (keydown)="filter($event)"
+        />
+      </li>
+      <br />
+      <li class="has-children  text-center">
+        <pre class="card card-block card-header" style="color: aliceblue">{{
+            userParams.gender || "null"
+        }}</pre>
+        <div class="btn-group">
+          <label
+            class="btn btn-primary"
+            [(ngModel)]="userParams.gender"
+            btnRadio="all"
+            tabindex="0"
+            role="button"
+            >All</label
+          >
+          <label
+            class="btn btn-primary"
+            [(ngModel)]="userParams.gender"
+            btnRadio="male"
+            tabindex="0"
+            role="button"
+            >Male</label
+          >
+          <label
+            class="btn btn-primary"
+            [(ngModel)]="userParams.gender"
+            (change)="filter()"
+            btnRadio="female"
+            tabindex="0"
+            role="button"
+            >Female</label
+          >
+        </div>
+      </li>
+      <li class="has-children ">
+       
+      </li>
+      <li class="has-children  text-center">
+          <pre class="card card-block card-header" style="color: aliceblue">{{
+              userParams.orderBy || "null"
+          }}</pre>
+          <div class="btn-group">
+            <label
+              class="btn btn-primary"
+              [(ngModel)]="userParams.orderBy"
+              btnRadio="created"
+              tabindex="0"
+              role="button"
+              >Created Date</label
+            >
+            <label
+              class="btn btn-primary"
+              [(ngModel)]="userParams.orderBy"
+              btnRadio="lastactive"
+              tabindex="0"
+              role="button"
+              >Last Active</label
+            >
+            
+          </div>
+        </li>
+      <li class="has-children  " style="color: aliceblue">
+          <div class="form-inline">
+              <label for="minAge">Age From</label>
+              <input type="number"     (keydown)="filter($event)"       [(ngModel)]="userParams.minAge"
+              class="form-control ml-1" style="width: 70px" id="minAge" name="minAge">
+            </div>
+          <br />
+            <div class="form-inline ">
+              <label for="maxAge ">Age To</label>
+              <input type="number" class="form-control ml-4" (keydown)="filter($event)" [(ngModel)]="userParams.maxAge" style="width: 70px" id="maxAge" name="maxAge">
+            </div>
+    </ul>
+
+    <ul>
+        <li class="cd-label" > Action</li>
+        <li class="action-btn"(click)="clicks()" ><a style="text-decoration: none;cursor: pointer; background-color: #38B44A"> Filter </a></li>
+<br/>
+				<li class="action-btn"(click)="resetFilter()"><a style="text-decoration: none;cursor: pointer;"> Clear</a></li>
+
+      </ul>
+  </nav>
+
+  <div class="content-wrapper">
+    <app-member-list [users]="users" [userParams]="userParams" [pagination]="pagination" ></app-member-list>
+  </div>
+  <!-- .content-wrapper -->
+</main>

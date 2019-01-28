@@ -12,3 +12,22 @@
     background-color: #fff;
     border-top: none;
 }
+.ddd h1  {
+    padding: 0 !important;
+    margin: 0 !important;
+  
+        text-align: center;
+        padding-top: 3em !important;
+        font-size: 3rem;
+        
+      
+}
+textarea{
+    font-size: 3rem;
+
+}
+
+input{
+    font-size: 1.4rem;
+
+}

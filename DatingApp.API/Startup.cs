@@ -22,7 +22,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using DatingApp.API.ExtentionsMethods;
 using Newtonsoft.Json;
 using AutoMapper;
 using DatingApp.API.HelpersAndExtentions;

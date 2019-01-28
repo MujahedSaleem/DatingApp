@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using DatingApp.ApI.Data;
+using DatingApp.API.HelpersAndExtentions;
 using DatingApp.API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DatingApp.API.Data
 {
+ 
     public class DatingRepository : IDatingRepository
     {
         private readonly IMapper _mapper;
@@ -32,13 +34,13 @@ namespace DatingApp.API.Data
 
         public async Task<Photo> GetMainPhoto(string userID)
         {
-            return await  _db.Photos.Where(a=>a.UserId == userID).FirstOrDefaultAsync(p=>p.IsMain);
+            return await _db.Photos.Where(a => a.UserId == userID).FirstOrDefaultAsync(p => p.IsMain);
 
         }
 
-        public async  Task<Photo> GetPhoto(int id)
+        public async Task<Photo> GetPhoto(int id)
         {
-          return  await _db.Photos.FirstOrDefaultAsync(a=>a.Id==id);
+            return await _db.Photos.FirstOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task<User> GetUser(string Id)
@@ -53,9 +55,45 @@ namespace DatingApp.API.Data
             return await _db.SaveChangesAsync() > 0;
         }
 
-        public async Task<IEnumerable<User>> Users()
+        public async Task<PageList<User>> Users(UserParams userParams)
         {
-            return await _db.User.Include(a => a.Photos).ToListAsync();
+            var users = _db.User.Include(a => a.Photos).Where(a => a.Id != userParams.UserId).AsQueryable();
+            if (userParams.Gender != "all")
+            {
+                users = users.Where(a => a.gander == userParams.Gender);
+            }
+             if (userParams.name != "all")
+            {
+                users = users.Where(a => a.UserName.ToLower().Contains(userParams.name.ToLower()));
+            }
+            if(!string.IsNullOrEmpty(userParams.orderBy)){
+               switch (userParams.orderBy)
+               {
+                   case "created":
+                   users=users.OrderByDescending(a=>a.Created);
+                   break;
+               
+                  default:
+                   users=users.OrderByDescending(a=>a.LastActive);
+                   break;
+
+                   
+               }
+            }
+            if (userParams.minAge != 18 && userParams.maxAge != 99)
+            {
+                users = users.Where(a => a.DateOfBirth.Age() > userParams.minAge && a.DateOfBirth.Age() < userParams.maxAge);
+            }
+            else if (userParams.minAge != 18)
+            {
+                users = users.Where(a => a.DateOfBirth.Age() > userParams.minAge);
+            }
+            else
+            {
+                users = users.Where(a => a.DateOfBirth.Age() < userParams.maxAge);
+            }
+            return await PageList<User>.CreateAsync(users, userParams.Pagenumber, userParams.PageSize);
+
         }
     }
 }

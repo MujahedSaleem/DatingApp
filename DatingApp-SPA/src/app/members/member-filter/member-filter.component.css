@@ -1,0 +1,33 @@
+@media only screen and (min-width: 1170px) {
+    .cd-main-content .content-wrapper {
+      margin-left: 200px;
+    }
+    .cd-main-content::before {
+      content: 'desktop';
+    }
+  }@media only screen and (min-width: 768px) {
+    .cd-main-content .content-wrapper {
+      margin-top: 25px;
+      padding-top: 55px;
+    }
+    .cd-main-content .content-wrapper h1 {
+      padding: 4em 0;
+      font-size: 3.2rem;
+      font-weight: 300;
+    }
+    .cd-main-content::before {
+      content: 'tablet';
+    }
+  }.cd-main-content .content-wrapper {
+    padding: 45px 5% 3em;
+  }
+  .cd-main-content .content-wrapper h1 {
+    text-align: center;
+    padding: 3em 0;
+    font-size: 2rem;
+  }
+  .cd-main-content::before {
+    /* never visible - used to check MQ in jQuery */
+    display: none;
+    content: 'mobile';
+  }

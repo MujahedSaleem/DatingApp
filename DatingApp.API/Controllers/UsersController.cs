@@ -25,12 +25,15 @@ namespace DatingApp.API.Controllers
             repo = _repo;
         }
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers([FromQuery]UserParams param)
         {
-            var users = await repo.Users();
+            var users = await repo.Users(param);
+            param.UserId =User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var userToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users);
+            Response.AddPagination(users.CurrentPage,users.PageSize,users.TotalCount,users.TotalPages);
             return Ok(userToReturn);
         }
+        
         [HttpGet("{id}",Name="GetUser")]
         public async Task<IActionResult> GetUser(string id)
         {
@@ -56,4 +59,5 @@ namespace DatingApp.API.Controllers
 
         }
     }
+    
 }
