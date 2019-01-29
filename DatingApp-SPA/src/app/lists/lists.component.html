@@ -1,3 +1,62 @@
-<p>
-  lists works!
-</p>
+ <div class="container-fluid">
+ <div class="py-5 " style="margin-top:3em ">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1 class="display-4">
+            {{
+              model === "likee" ? "People Like You " : "People You Like "
+            }}&nbsp; : {{ pagination.totalItem }}
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div
+            class="btn-group btn-group-toggle"
+            ngbRadioGroup
+            name="radioBasic"
+            [(ngModel)]="model"
+          >
+            <label ngbButtonLabel class="btn-primary" style="font-size: 2rem">
+              <input ngbButton type="radio" value="likee" (click)="loadUser()"  /> Like Me
+            </label>
+            <label ngbButtonLabel class="btn-primary" style="font-size: 2rem">
+              <input ngbButton type="radio" value="likers"  (click)="loadUser()" /> I Like
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+          <div class="col-md-3" *ngFor="let people of users">
+            <app-member-card [user]="people"></app-member-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="pagination justify-content-center align-items-center">
+            <pagination
+              [disabled]="disabled"
+              [(ngModel)]="pagination.currentPage"
+              [itemsPerPage]="pagination.itemPerPage"
+              (pageChanged)="pageChanged($event)"
+              [totalItems]="pagination.totalItem"
+            ></pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

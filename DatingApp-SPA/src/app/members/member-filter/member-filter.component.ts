@@ -28,7 +28,6 @@ export class MemberFilterComponent implements OnInit {
   ngOnInit() {
     this.route.data.subscribe(
       data => {
-        console.log(data);
         this.users = data['users'].result;
         this.pagination = data['users'].pagination;
       },
@@ -36,7 +35,6 @@ export class MemberFilterComponent implements OnInit {
         this.alertify.error(error);
       }
     );
-    this.userParams.gender = 'all';
     this.userParams.maxAge = '99';
     this.userParams.minAge = '18';
     this.userParams.orderBy = 'lastActive';

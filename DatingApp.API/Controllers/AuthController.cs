@@ -92,13 +92,13 @@ namespace DatingApp.API.Controllers
             return Ok(new { Token = tokenString, user });
 
         }
-    
+          [HttpPost("logout")]
         public  IActionResult logout( )
         {
 
             _repo.LogOut();
             
-            return LocalRedirect(Request.PathBase);
+            return Ok();
 
         }
     

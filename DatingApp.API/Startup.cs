@@ -39,7 +39,8 @@ namespace DatingApp.API
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {        //   services.AddTransient<Seed>();
+
             services.AddAutoMapper();
             services.AddDbContext<ApplicationDbContext>(a => a.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IDatingRepository, DatingRepository>();
@@ -63,7 +64,6 @@ namespace DatingApp.API
                 });
 
             });
-            services.AddTransient<Seed>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(Options =>
                 {
@@ -86,7 +86,7 @@ namespace DatingApp.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seed sd)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env/* , Seed sd */)
         {
             if (env.IsDevelopment())
             {

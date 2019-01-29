@@ -4,4 +4,6 @@ export interface Userparams {
     gender: string;
     name: string;
     orderBy: string;
+    liker: Boolean;
+    likee: Boolean;
 }

@@ -25,6 +25,9 @@ export class UserService {
       params = params.append('Pagenumber', page);
       params = params.append('PageSize', itemsPerPage);
       if (userparams != null) {
+        params = params.append('liker',  userparams.liker == true ? 'true' : 'false');
+        params = params.append('likee',  userparams.likee == true ? 'true' : 'false');
+
         params = params.append('Gender', userparams.gender == null ? '' : userparams.gender );
         params = params.append('maxAge', userparams.maxAge == null ? '99' :   userparams.maxAge);
         params = params.append('minAge',  userparams.minAge == null ? '18' : userparams.minAge);
@@ -59,6 +62,9 @@ export class UserService {
   }
   deletePhoto(id: number, userId: string) {
     return this.http.post(this.baseUrl + userId + '/photo/' + id + '/delete', {} );
+  }
+  like(userId: string, recipientId: string): Observable<any> {
+    return this.http.post(this.baseUrl + userId + '/like/' + recipientId , {} );
   }
 }
 

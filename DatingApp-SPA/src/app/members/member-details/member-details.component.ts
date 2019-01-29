@@ -18,7 +18,10 @@ export class MemberDetailsComponent implements OnInit {
   user: User;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
-
+  Action = true;
+ recipientId: string;
+  userId: any;
+  done: any = true;
   constructor(
     private userService: UserService,
     private alertFiy: AlertifyService,
@@ -33,9 +36,14 @@ export class MemberDetailsComponent implements OnInit {
       error => {
         this.alertFiy.error(error);
       }
+
     );
+    this.recipientId = '' + this.route.snapshot.params.id;
+    this.userId = JSON.parse(localStorage.getItem('user'));
+   if (this.recipientId === this.userId.id) {
+     this.Action = false;
+   }
     this.loadImage();
-    console.log(this.user.photosUrl );
   }
   loadImage() {
     this.galleryOptions = [
@@ -63,5 +71,16 @@ export class MemberDetailsComponent implements OnInit {
     }
 
     return imageUrls;
+  }
+  like() {
+      this.done = false;
+     this.userService.like(this.userId.id, this.recipientId)
+    .subscribe(a => {
+      this.alertFiy.success(JSON.parse(a) + this.user.userName);
+    } , error => {
+    this.alertFiy.error(error);
+    }, () => {
+     this.done = true;
+    });
   }
 }

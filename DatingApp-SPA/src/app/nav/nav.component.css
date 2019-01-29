@@ -6,3 +6,7 @@
     border: 2px solid white;
     display: inline;
 }
+.cd-main-header{
+    z-index: 9999;
+
+}

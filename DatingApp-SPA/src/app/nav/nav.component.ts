@@ -4,6 +4,7 @@ import { AlertifyService } from '../_services/alertify.service';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { UserService } from '../_services/user.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: '/app-nav',
@@ -18,7 +19,8 @@ export class NavComponent implements OnInit {
     public authService: AuthService,
     private userService: UserService,
      private alertyfiy: AlertifyService,
-     private router: Router) {}
+     private router: Router,
+     private location: Location) {}
   ngOnInit() {
     if (this.loggedIn()) {
       this.name = this.authService.decodedToken[environment.Name];
@@ -26,9 +28,11 @@ export class NavComponent implements OnInit {
        this.Url = next;
      });
     }
+
   }
 
   login() {
+
     this.authService.login(this.model)
         .subscribe(next => {
           this.alertyfiy.success('Logged In Successfully');
@@ -38,6 +42,8 @@ export class NavComponent implements OnInit {
           this.router.navigate(['/members']);
 
         });
+        window.location.replace('/members');
+
   }
 
   loggedIn() {
@@ -45,14 +51,17 @@ export class NavComponent implements OnInit {
   }
   logout() {
     this.authService.logout().subscribe(a => {
-      this.alertyfiy.success(a.toString());
+      this.alertyfiy.success('Logout SuccessFuly');
     });
+    this.name = null;
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     this.authService.decodedToken = null;
     this.authService.currentuser = null;
     this.alertyfiy.message('logged out');
+    this.location.path();
     this.router.navigate(['/home']);
+
 
 
   }

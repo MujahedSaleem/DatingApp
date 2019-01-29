@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DatingApp.API.Data
 {
- 
+
     public class DatingRepository : IDatingRepository
     {
         private readonly IMapper _mapper;
@@ -30,6 +30,12 @@ namespace DatingApp.API.Data
         public void Delete<T>(T entity) where T : class
         {
             _db.Entry(entity).State = EntityState.Deleted;
+        }
+
+        public async Task<Like> GetLike(string userId, string recipientId)
+        {
+            return await _db.Likes.FirstOrDefaultAsync(u => u.LikerId == userId && u.LikeeId == recipientId);
+
         }
 
         public async Task<Photo> GetMainPhoto(string userID)
@@ -58,27 +64,39 @@ namespace DatingApp.API.Data
         public async Task<PageList<User>> Users(UserParams userParams)
         {
             var users = _db.User.Include(a => a.Photos).Where(a => a.Id != userParams.UserId).AsQueryable();
-            if (userParams.Gender != "all")
+            if (!string.IsNullOrEmpty( userParams.Gender))
             {
                 users = users.Where(a => a.gander == userParams.Gender);
             }
-             if (userParams.name != "all")
+            if (userParams.name != "all")
             {
                 users = users.Where(a => a.UserName.ToLower().Contains(userParams.name.ToLower()));
             }
-            if(!string.IsNullOrEmpty(userParams.orderBy)){
-               switch (userParams.orderBy)
-               {
-                   case "created":
-                   users=users.OrderByDescending(a=>a.Created);
-                   break;
-               
-                  default:
-                   users=users.OrderByDescending(a=>a.LastActive);
-                   break;
+            if (!string.IsNullOrEmpty(userParams.orderBy))
+            {
+                switch (userParams.orderBy)
+                {
+                    case "created":
+                        users = users.OrderByDescending(a => a.Created);
+                        break;
 
-                   
-               }
+                    default:
+                        users = users.OrderByDescending(a => a.LastActive);
+                        break;
+
+
+                }
+            }
+            if (userParams.likee)
+            {
+                var userlike = await getLikeUser(userParams.UserId, userParams.liker);
+                users = users.Where(a => userlike.Contains(a.Id));
+            }
+            else if (userParams.liker)
+            {
+                var userlikees = await getLikeUser(userParams.UserId, userParams.liker);
+                users = users.Where(a => userlikees.Contains(a.Id));
+
             }
             if (userParams.minAge != 18 && userParams.maxAge != 99)
             {
@@ -88,12 +106,26 @@ namespace DatingApp.API.Data
             {
                 users = users.Where(a => a.DateOfBirth.Age() > userParams.minAge);
             }
-            else
+            else if (userParams.maxAge != 99)
             {
                 users = users.Where(a => a.DateOfBirth.Age() < userParams.maxAge);
             }
             return await PageList<User>.CreateAsync(users, userParams.Pagenumber, userParams.PageSize);
 
+        }
+        private async Task<IEnumerable<string>> getLikeUser(string userId, bool liker)
+        {
+            var loggedInUser = await _db.User.Include(a => a.Likees).Include(a => a.Likers).FirstOrDefaultAsync(a => a.Id == userId);
+
+            if (liker)
+            {
+                return  loggedInUser.Likers.Where(a => a.LikeeId == userId).Select(a => a.LikerId);
+            }
+            else
+            {
+                return  loggedInUser.Likees.Where(a => a.LikerId == userId).Select(a => a.LikeeId);
+
+            }
         }
     }
 }

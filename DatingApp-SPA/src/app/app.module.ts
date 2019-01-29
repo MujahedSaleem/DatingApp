@@ -35,6 +35,8 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { MemberFilterComponent } from './members/member-filter/member-filter.component';
 import { SidebarJSModule } from 'ng-sidebarjs';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { ListLikerLikeeResolver } from './_resolver/list-liker-likee.resolver';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 
 export function tokenGetter() {
@@ -63,6 +65,7 @@ export function tokenGetter() {
       HttpClientModule,
       FormsModule,
       ReactiveFormsModule,
+      NgbModule,
       TabsModule.forRoot(),
       SidebarJSModule.forRoot(),
       PaginationModule.forRoot(),
@@ -91,7 +94,8 @@ export function tokenGetter() {
       MemberDetailResolver,
       MemberListResolver,
       MemberEditResolver,
-      PreventUnsavedChanges
+      PreventUnsavedChanges,
+      ListLikerLikeeResolver
    ],
    bootstrap: [
       AppComponent
