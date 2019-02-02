@@ -13,8 +13,8 @@ import { Location } from '@angular/common';
 })
 export class NavComponent implements OnInit {
   model: any = {};
-  name = '';
-  Url = '';
+  name: string ;
+  Url: string ;
   constructor(
     public authService: AuthService,
     private userService: UserService,

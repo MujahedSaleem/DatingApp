@@ -26,8 +26,8 @@ export class UserService {
       params = params.append('Pagenumber', page);
       params = params.append('PageSize', itemsPerPage);
       if (userparams != null) {
-        params = params.append('liker',  userparams.liker == true ? 'true' : 'false');
-        params = params.append('likee',  userparams.likee == true ? 'true' : 'false');
+        params = params.append('liker',  userparams.liker === true ? 'true' : 'false');
+        params = params.append('likee',  userparams.likee === true ? 'true' : 'false');
 
         params = params.append('Gender', userparams.gender == null ? '' : userparams.gender );
         params = params.append('maxAge', userparams.maxAge == null ? '99' :   userparams.maxAge);

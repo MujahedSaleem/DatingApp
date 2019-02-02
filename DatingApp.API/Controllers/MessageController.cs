@@ -172,16 +172,16 @@ namespace DatingApp.API.Controllers
 
             throw new Exception("Can't Delete Message");
         }
-        [HttpPost("signalR/read/{id}")]
-        public async Task<IActionResult> readMessage(string id, string userId)
+        [HttpPost("signalR/read/{recipientId}")]
+        public async Task<IActionResult> readMessage(string recipientId, string userId)
         {
             if (!(userId.Equals((User.FindFirst(ClaimTypes.NameIdentifier).Value))))
             {
                 return Unauthorized();
             }
 
-            var messages = await repo.GetMessageThread(userId, id);
-            if (id == messages.FirstOrDefault().senderId)
+            var messages = await repo.GetMessageThread(userId, recipientId);
+            if (userId == messages.FirstOrDefault().senderId)
                 return NoContent();
             MarkAsRead(messages, userId);
             if (messages is null)

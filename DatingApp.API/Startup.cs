@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using AutoMapper;
 using DatingApp.API.HelpersAndExtentions;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace DatingApp.API
 {
@@ -42,7 +43,9 @@ namespace DatingApp.API
         {        //   services.AddTransient<Seed>();
 
             services.AddAutoMapper();
-            services.AddDbContext<ApplicationDbContext>(a => a.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(a => a.
+            UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+            .ConfigureWarnings(warnigns=>warnigns.Ignore(CoreEventId.IncludeIgnoredWarning)));
             services.AddScoped<IDatingRepository, DatingRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<LogUserActivity>();
@@ -129,8 +132,14 @@ namespace DatingApp.API
             {
                 routes.MapHub<notifyHub>("/notify");
             });
-         
-            app.UseMvc();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            
+            app.UseMvc(route => {
+                route.MapSpaFallbackRoute(
+                   name: "SPA-CallBack",
+                   defaults: new { controller = "Fallback", action = "Index" });
+            });
         }
     }
 }
