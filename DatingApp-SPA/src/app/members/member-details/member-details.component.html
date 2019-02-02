@@ -1,4 +1,4 @@
-<div class="container-fluid mt-5">
+<div  class="container-fluid mt-5" >
     <div class="row ml-5">
         <h1 class="bold">{{user.knownAs}}'s Profile</h1>
     </div>
@@ -39,7 +39,7 @@
               <i class="demo-icon icon-spin6 animate-spin" *ngIf="!done"><div id="xe839"></div></i>
              
             </button>
-            <button style="font-size: 20px" class="btn btn-success">
+            <button style="font-size: 20px" (click)="selectTab(3)" class="btn btn-success">
               <i class="fa fa-comments"></i>
             </button>
           </div>
@@ -48,7 +48,7 @@
     </div>
     <div class="col-sm-8 ">
       <div class="tab-panel">
-        <tabset class="member-tabset">
+        <tabset class="member-tabset" #memberTabs>
           <tab heading="About {{ user.userName }}">
             <h4>Description:</h4>
             <p>{{ user.introduction }}</p>
@@ -66,6 +66,7 @@
             </tab>
           <tab heading="Messages">
             
+            <app-member-messages [recipientId]="recipientId"></app-member-messages>
             </tab>
         </tabset>
       </div>

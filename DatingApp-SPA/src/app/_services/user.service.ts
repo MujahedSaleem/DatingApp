@@ -7,6 +7,7 @@ import { UserForUpdate } from '../Models/userForUpdate';
 import { PaginatedResult } from '../Models/Pagination';
 import { map, tap } from 'rxjs/operators';
 import { Userparams } from '../Models/userparams';
+import { Message } from '../Models/message';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +67,44 @@ export class UserService {
   like(userId: string, recipientId: string): Observable<any> {
     return this.http.post(this.baseUrl + userId + '/like/' + recipientId , {} );
   }
+
+  getMessages(userId: string, page?, itemsPerPage?, messagesContainer?): Observable<PaginatedResult<Message[]>> {
+    const paginationResult: PaginatedResult<Message[]> = new PaginatedResult<Message[]>();
+    let params = new HttpParams();
+    if (page != null && itemsPerPage != null) {
+      params = params.append('Pagenumber', page);
+      params = params.append('PageSize', itemsPerPage);
+      if (messagesContainer != null) {
+        params = params.append('MessageContainer', messagesContainer);
+      }
+    }
+    return this.http.get<Message[]>(this.baseUrl + userId + '/Message/', {observe: 'response', params}).pipe(
+      map( response => {
+        paginationResult.result = response.body;
+        if (response.headers.get('Pagination') != null) {
+          paginationResult.pagination = JSON.parse(response.headers.get('Pagination'));
+        }
+        return paginationResult;
+      })
+    );
+  }
+
+  getMessageThred(userId: string, recipientId: string) {
+    return this.http.get<Message[]>(this.baseUrl  + userId + '/Message/thread/' + recipientId);
+  }
+  sendMessage(userId: string, message: Message) {
+    return this.http.post(this.baseUrl + userId + '/Message', message);
+  }
+  sendrealTimeMessage(userId: string, message: Message) {
+    return this.http.post(this.baseUrl + userId + '/Message/signalR', message);
+  }
+  deleterealTimeMessage(userId: string, id: number) {
+    return this.http.post(this.baseUrl + userId + '/Message/signalR/delete/' + id, {} );
+  }
+  ReadRealTimeMessage(userId: string, recipientId: string) {
+    return this.http.post(this.baseUrl + userId + '/Message/signalR/read/' + recipientId, {} );
+  }
+
 }
 
 

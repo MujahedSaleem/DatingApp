@@ -13,6 +13,7 @@ import { MemberEditResolver } from './_resolver/member-edit.resolver';
 import { PreventUnsavedChanges } from './_gurds/prevent-Unsaved-Changes.guard';
 import { MemberFilterComponent } from './members/member-filter/member-filter.component';
 import { ListLikerLikeeResolver } from './_resolver/list-liker-likee.resolver';
+import { MessagesResolver } from './_resolver/messages.resolver';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -25,7 +26,7 @@ children: [
   { path: 'members/edit', component: MemberEditComponent,
     resolve: {user: MemberEditResolver}, canDeactivate: [PreventUnsavedChanges] }
 ,
-  { path: 'messages', component: MessagesComponent },
+  { path: 'messages', component: MessagesComponent, resolve: {messages: MessagesResolver} },
   { path: 'lists', component: ListsComponent, resolve: {users: ListLikerLikeeResolver} },
   { path: 'members', component: MemberFilterComponent, resolve: {users: MemberListResolver}},
   { path: 'members/:id', component: MemberDetailsComponent, resolve: {user: MemberDetailResolver} },

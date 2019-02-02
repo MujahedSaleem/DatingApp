@@ -5,6 +5,9 @@ import { UserService } from 'src/app/_services/user.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Pagination, PaginatedResult } from 'src/app/Models/Pagination';
+import { HubConnection, ILogger } from '@aspnet/signalr';
+import { Message } from 'src/app/Models/message';
+import * as signalR from '@aspnet/signalr';
 
 @Component({
   selector: 'app-member-filter',
@@ -12,10 +15,13 @@ import { Pagination, PaginatedResult } from 'src/app/Models/Pagination';
   styleUrls: ['./member-filter.component.css']
 })
 export class MemberFilterComponent implements OnInit {
+  private _hubConnection: HubConnection;
+  msgs: Partial<Message[]> = [];
   users: User[];
   user: User = JSON.parse(localStorage.getItem('user'));
   userParams: Partial<Userparams> = {};
   pagination: Pagination;
+  params: signalR.IHttpConnectionOptions;
 
 
   constructor(
@@ -26,6 +32,10 @@ export class MemberFilterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
+    
+
+
     this.route.data.subscribe(
       data => {
         this.users = data['users'].result;

@@ -44,6 +44,51 @@ namespace DatingApp.API.Data
 
         }
 
+        public async Task<Message> GetMessage(int id)
+        {
+            return await _db.Messages.FirstOrDefaultAsync(a => a.Id == id);
+
+        }
+
+        public async Task<PageList<Message>> GetMessages(MessageParams messageParams)
+        {
+            var messages = _db.Messages.Include(u => u.Sender)
+            .ThenInclude(u => u.Photos)
+            .Include(u => u.Recipient)
+            .ThenInclude(u => u.Photos).AsQueryable();
+            
+            switch (messageParams.MessageContainer)
+            {
+                case "Inbox":
+                    messages = messages. Where(u => u.recipientId == messageParams.UserId && u.recipientDeleted==false);
+                    break;
+                case "Outbox":
+                    messages = messages.Where(u => u.senderId == messageParams.UserId && u.senderDeleted == false);
+                    break;
+                default:
+                    messages = messages.Where(u => u.recipientId == messageParams.UserId && u.isRead == false  &&u.recipientDeleted == false);
+                    break;
+
+            }
+
+            messages = messages.OrderByDescending(d => d.MessageSent);
+            return await PageList<Message>
+            .CreateAsync(messages, messageParams.Pagenumber, messageParams.PageSize);
+        }
+        public async Task<IEnumerable<Message>> GetMessageThread(string userId, string recipientId)
+        {
+            var messages = await _db.Messages.Include(u => u.Sender)
+                       .ThenInclude(u => u.Photos)
+                       .Include(u => u.Recipient)
+                       .ThenInclude(u => u.Photos)
+                       .Where(u => u.recipientId == userId && u.recipientDeleted == false && u.senderId == recipientId 
+                       || u.recipientId == recipientId && u.senderDeleted == false && u.senderId == userId)
+                       .OrderBy(a => a.MessageSent).ToListAsync();
+            var m =  messages.AsQueryable().TakeLast(10).ToList();
+
+            return m;
+        }
+
         public async Task<Photo> GetPhoto(int id)
         {
             return await _db.Photos.FirstOrDefaultAsync(a => a.Id == id);
@@ -64,7 +109,7 @@ namespace DatingApp.API.Data
         public async Task<PageList<User>> Users(UserParams userParams)
         {
             var users = _db.User.Include(a => a.Photos).Where(a => a.Id != userParams.UserId).AsQueryable();
-            if (!string.IsNullOrEmpty( userParams.Gender))
+            if (!string.IsNullOrEmpty(userParams.Gender))
             {
                 users = users.Where(a => a.gander == userParams.Gender);
             }
@@ -119,11 +164,11 @@ namespace DatingApp.API.Data
 
             if (liker)
             {
-                return  loggedInUser.Likers.Where(a => a.LikeeId == userId).Select(a => a.LikerId);
+                return loggedInUser.Likers.Where(a => a.LikeeId == userId).Select(a => a.LikerId);
             }
             else
             {
-                return  loggedInUser.Likees.Where(a => a.LikerId == userId).Select(a => a.LikeeId);
+                return loggedInUser.Likees.Where(a => a.LikerId == userId).Select(a => a.LikeeId);
 
             }
         }

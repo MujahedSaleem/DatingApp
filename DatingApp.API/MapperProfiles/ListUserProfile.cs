@@ -46,6 +46,19 @@ namespace DatingApp.API.MapperProfiles
                 opt.MapFrom(src => src.gander);
             }).ReverseMap();
             
+            CreateMap<MessageForCreationDto,Message>().ReverseMap();
+            
+            CreateMap<Message,MessageForReturnDto>()
+            .ForMember(dest =>dest.recipientPhotoUrl,opt=>{
+                opt.MapFrom(src=>src.Recipient.Photos.FirstOrDefault(p=>p.IsMain).Url);
+            }) .ForMember(dest =>dest.senderPhotoUrl,opt=>{
+                opt.MapFrom(src=>src.Sender.Photos.FirstOrDefault(p=>p.IsMain).Url);
+            }) .ForMember(dest =>dest.senderKnownAs,opt=>{
+                opt.MapFrom((dest,src)=>dest.Sender.KnownAs);
+            }) .ForMember(dest =>dest.recipientKnwonAs,opt=>{
+                opt.MapFrom((dest,src)=>dest.Recipient.KnownAs);
+            }) 
+            .ReverseMap();
         }
 
     }

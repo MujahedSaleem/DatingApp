@@ -37,6 +37,9 @@ import { SidebarJSModule } from 'ng-sidebarjs';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { ListLikerLikeeResolver } from './_resolver/list-liker-likee.resolver';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { MessagesResolver } from './_resolver/messages.resolver';
+import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
+import {ScrollDispatchModule} from '@angular/cdk/scrolling';
 
 
 export function tokenGetter() {
@@ -56,13 +59,15 @@ export function tokenGetter() {
       MemberEditComponent,
       PhotoEditorComponent,
       TimeAgoPipe,
-      MemberFilterComponent
+      MemberFilterComponent,
+      MemberMessagesComponent
 
    ],
    imports: [
       BrowserModule,
       AppRoutingModule,
       HttpClientModule,
+      ScrollDispatchModule,
       FormsModule,
       ReactiveFormsModule,
       NgbModule,
@@ -95,7 +100,8 @@ export function tokenGetter() {
       MemberListResolver,
       MemberEditResolver,
       PreventUnsavedChanges,
-      ListLikerLikeeResolver
+      ListLikerLikeeResolver,
+      MessagesResolver,
    ],
    bootstrap: [
       AppComponent

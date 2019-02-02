@@ -40,9 +40,9 @@ export class NavComponent implements OnInit {
           this.alertyfiy.error(error);
         }, () => {
           this.router.navigate(['/members']);
+          window.location.replace('/members');
 
         });
-        window.location.replace('/members');
 
   }
 

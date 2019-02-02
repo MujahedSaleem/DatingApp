@@ -1,0 +1,117 @@
+<div   class="container app" style="height: 500px;">
+  <div class="row app-one">
+    <div class="col-sm-12 conversation">
+      <div class="row heading">
+        <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
+          <div class="heading-avatar-icon"><img src="" /></div>
+        </div>
+        <div class="col-sm-8 col-xs-7 heading-name">
+          <a class="heading-name-meta"> </a>
+          <span class="heading-online">Online</span>
+        </div>
+      </div>
+       
+      <div class="row message" id="conversation">
+        <div  #messageContainer id="messageContainer"   class="row " style=" overflow-y:scroll;  height: 100%" >
+          <div class="row messageside m-2"  *ngFor="let message of messages">
+            <div
+              [ngClass]="{
+                ' message-main-receiver': message.senderId === recipientId,
+                'col-sm-12':
+                  message.senderId !== recipientId ||
+                  message.senderId === recipientId,
+                'message-main-sender': message.senderId !== recipientId
+              }"
+            >
+              <div
+                [ngClass]="{
+                  'd-flex':
+                    message.senderId !== recipientId ||
+                    message.senderId === recipientId,
+                  ' justify-content-start': message.senderId === recipientId,
+                  'justify-content-end': message.senderId !== recipientId
+                }"
+              >
+                <div
+                  class="heading-avatar-icon  mr-2 pt-2"
+                  style="width:12%"
+                  *ngIf="message.senderId === recipientId"
+                >
+                  <img
+                    src="{{ message.senderPhotoUrl }}"
+                    class="float-right"
+                    style="display: inline-block;"
+                  />
+                </div>
+                <div
+                  [ngClass]="{
+                    'receiver ml-5': message.senderId === recipientId,
+                    'sender ml-5': message.senderId !== recipientId
+                  }"
+                >
+                  <div class="message-text">
+                    {{ message.content }}
+                    <span class="message-time pull-right">
+                    <i (click)="delteMessage(message.id,message.senderId)" *ngIf="message.senderId === userId " class="fa fa-times"></i>
+
+
+                      {{ message.messageSent | timeAgo }}
+
+                      <img
+                        *ngIf="
+                          message.isRead && message.senderId !== recipientId
+                        "
+                        class="float-right ml-2"
+                        style=" max-width: 8%;
+                        height: auto;"
+                        src="https://img.icons8.com/ios/50/000000/double-tick.png"
+                      />
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="heading-avatar-icon"
+                  style="width:12%"
+                  *ngIf="message.senderId !== recipientId"
+                >
+                  <img
+                    src="{{ message.senderPhotoUrl }}"
+                    class="float-right"
+                    style="display: inline-block;"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form
+        #messageForm="ngForm"
+        (ngSubmit)="messageForm.valid && sendMessage()"
+      >
+        <div class="row reply">
+          <div class="col-sm-1 col-xs-1 reply-emojis">
+            <i class="fa fa-smile-o fa-2x"></i>
+          </div>
+          <div class="col-sm-9 col-xs-9 reply-main">
+            <textarea
+              [(ngModel)]="newMessage.content"
+              class="form-control"
+              rows="1"
+              id="comment"
+              name="newMessage"
+            ></textarea>
+          </div>
+          <div class="col-sm-1 col-xs-1 reply-recording">
+            <i class="fa fa-microphone fa-2x" aria-hidden="true"></i>
+          </div>
+          <div class="col-sm-1 col-xs-1 reply-send">
+            <button [disabled]="!messageForm.valid">
+              <i class="fa fa-send fa-2x"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -60,10 +60,14 @@ namespace DatingApp.API
             {
                 Options.AddPolicy("EnableCROS", builder =>
                 {
-                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials().Build();
+                    builder .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithOrigins("http://localhost:4200").AllowCredentials().Build();
                 });
 
             });
+            services.AddSignalR();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(Options =>
                 {
@@ -88,6 +92,14 @@ namespace DatingApp.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env/* , Seed sd */)
         {
+            app.Use(async (ctx, next) =>
+            {
+                await next();
+                if (ctx.Response.StatusCode == 204)
+                {
+                    ctx.Response.ContentLength = 0;
+                }
+            });
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -113,6 +125,11 @@ namespace DatingApp.API
             // sd.SeedUsers();
             app.UseAuthentication();
             app.UseCors("EnableCROS");
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<notifyHub>("/notify");
+            });
+         
             app.UseMvc();
         }
     }
